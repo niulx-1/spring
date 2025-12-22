@@ -47,11 +47,11 @@ public class SimpleLoggerAdvisor implements CallAdvisor, StreamAdvisor {
     }
 
     private void logRequest(ChatClientRequest request) {
-        log.debug("request: {}", request);
+        log.info("request: {}", request);
     }
 
     private void logResponse(ChatClientResponse chatClientResponse) {
-        log.debug("response: {}", chatClientResponse);
+        log.info("response: {}", chatClientResponse);
     }
 
 }
