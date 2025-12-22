@@ -13,3 +13,5 @@
 
 # https://api.openai.com/v1/chat/completions
 
+# https://api.deepseek.com/chat/completions
+
