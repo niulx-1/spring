@@ -28,6 +28,7 @@
     <properties>
         <java.version>17</java.version>
         <spring-ai.version>1.1.2</spring-ai.version>
+        <qwen.version>2.18.2</qwen.version>
     </properties>
     <dependencies>
 <!--        <dependency>-->
@@ -38,6 +39,12 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-deepseek</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>${qwen.version}</version>
         </dependency>
 
         <dependency>

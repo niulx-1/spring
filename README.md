@@ -15,3 +15,5 @@
 
 # https://api.deepseek.com/chat/completions
 
+# https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+
