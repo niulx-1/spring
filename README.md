@@ -13,7 +13,9 @@
 
 # https://api.openai.com/v1/chat/completions
 
+# https://api-docs.deepseek.com
 # https://api.deepseek.com/chat/completions
 
+# https://help.aliyun.com/
 # https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 

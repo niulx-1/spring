@@ -1,9 +1,11 @@
 package com.spring.ai.qwen;
 
 
+import com.alibaba.dashscope.aigc.generation.SearchOptions;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Maps;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -32,7 +34,22 @@ public class QWenChatModel implements ChatModel {
 
     @Override
     public ChatResponse call(Prompt prompt) {
-        Map<String, Object> requestBody = Map.of("model", QWenConfig.getModel(), "messages", convertMessages(prompt.getUserMessages()), "parameters", Map.of("result_format", "text"));
+        Map<String, Object> requestBody = Maps.newHashMap();
+        requestBody.put("messages", convertMessages(prompt.getUserMessages()));
+        requestBody.put("model", QWenConfig.getModel());
+
+        List<UserMessage> userMessages = prompt.getUserMessages();
+
+        Map<String, Object> metadata = userMessages.get(0).getMetadata();
+
+        if (metadata.containsKey("enable_search")) {
+            requestBody.put("enable_search", metadata.get("enable_search"));
+        }
+
+        if (metadata.containsKey("search_options")) {
+            SearchOptions searchOptions = (SearchOptions) metadata.get("search_options");
+            requestBody.put("search_options", searchOptions);
+        }
 
         ResponseEntity<ChatCompletion> response = restClient.post().uri("/chat/completions").body(requestBody).retrieve().toEntity(ChatCompletion.class);
 
@@ -51,13 +68,13 @@ public class QWenChatModel implements ChatModel {
 
         List<Generation> generations = choices.stream().map(choice -> {
             // @formatter:off
-            Map<String, Object> metadata = Map.of(
+            Map<String, Object> metadata1 = Map.of(
                     "id", chatCompletion.id() != null ? chatCompletion.id() : "",
                     "role", choice.message().role() != null ? choice.message().role().name() : "",
                     "index", choice.index(),
                     "finishReason", choice.finishReason() != null ? choice.finishReason() : "");
             // @formatter:on
-            return buildGeneration(choice, metadata);
+            return buildGeneration(choice, metadata1);
         }).toList();
 
         return new ChatResponse(generations);
