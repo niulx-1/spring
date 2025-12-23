@@ -1,7 +1,6 @@
 package com.spring.ai.qwen;
 
 import com.alibaba.dashscope.aigc.generation.SearchOptions;
-import com.alibaba.dashscope.tools.ToolFunction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -22,8 +21,8 @@ import java.util.Map;
 @RestController
 public class QWenChatController {
 
-    @Qualifier("qwenChatModel")
-    @Autowired
+//    @Qualifier("qwenChatModel")
+//    @Autowired
     ChatModel chatModel;
 
     @GetMapping("/chat")
