@@ -7,11 +7,19 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.deepseek.api.DeepSeekApi;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.function.Function;
 
 @RequestMapping("/deepseek/ai")
 @RestController
@@ -63,4 +71,21 @@ public class DeepSeekChatController {
                 .call()
                 .content();
     }
+
+    @GetMapping("/calling")
+    String calling() {
+        return createClient().prompt("What day is tomorrow?").tools(new DateTimeTools())
+                .call()
+                .content();
+    }
+
+    public class DateTimeTools {
+
+        @Tool(description = "Get the current date and time in the user's timezone")
+        String getCurrentDateTime() {
+            return LocalDateTime.now().atZone(LocaleContextHolder.getTimeZone().toZoneId()).toString();
+        }
+
+    }
+
 }
