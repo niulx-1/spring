@@ -23,12 +23,15 @@ public class DeepSeekChatController {
     @Resource
     MessageChatMemoryAdvisor messageChatMemoryAdvisor;
 
+    @Resource
+    SimpleLoggerAdvisor simpleLoggerAdvisor;
+
 
     public ChatClient createClient() {
         ChatClient.Builder builder = builderFactory.getObject();
         ChatOptions options = ChatOptions.builder().model(DeepSeekApi.ChatModel.DEEPSEEK_CHAT.getValue()).build();
         builder.defaultOptions(options);
-        builder.defaultAdvisors(new SimpleLoggerAdvisor(), messageChatMemoryAdvisor);
+        builder.defaultAdvisors(simpleLoggerAdvisor, messageChatMemoryAdvisor);
         return builder.build();
     }
 

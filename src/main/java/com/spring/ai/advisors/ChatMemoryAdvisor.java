@@ -1,4 +1,4 @@
-package com.spring.ai.config;
+package com.spring.ai.advisors;
 
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ChatMemoryConfig {
+public class ChatMemoryAdvisor {
 
     @Bean
     public MessageWindowChatMemory chatMemory() {

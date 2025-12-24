@@ -8,9 +8,11 @@ import org.springframework.ai.chat.client.advisor.api.CallAdvisor;
 import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 @Slf4j
+@Component
 public class SimpleLoggerAdvisor implements CallAdvisor, StreamAdvisor {
 
 
