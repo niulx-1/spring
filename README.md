@@ -11,6 +11,7 @@
 
 # </repositories>
 
+# https://platform.openai.com/docs/overview
 # https://api.openai.com/v1/chat/completions
 
 # https://api-docs.deepseek.com
