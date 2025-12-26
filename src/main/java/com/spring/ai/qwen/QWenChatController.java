@@ -1,5 +1,6 @@
 package com.spring.ai.qwen;
 
+import com.alibaba.dashscope.aigc.completion.ChatCompletionStreamOptions;
 import com.alibaba.dashscope.aigc.generation.SearchOptions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +33,20 @@ public class QWenChatController {
     String generation(String userInput) {
         return chatModel.call(userInput);
     }
+
+
+    @GetMapping(value = "/stream", produces = "text/plain;charset=UTF-8")
+    Flux<String> generation_stream(String userInput) {
+        Map<String, Object> maps = new HashMap<>();
+        maps.put("stream", true);
+        maps.put("enable_thinking", true);
+        ChatCompletionStreamOptions options = ChatCompletionStreamOptions.builder().includeUsage(true).build();
+        maps.put("stream_options", options);
+        UserMessage message = UserMessage.builder().text(userInput).metadata(maps).build();
+        Flux<String> stream = chatModel.stream(message);
+        return stream;
+    }
+
 
     @GetMapping("/search")
     String search(String userInput) {
@@ -65,6 +81,36 @@ public class QWenChatController {
         map1.put("image_url", "https://img.alicdn.com/imgextra/i2/O1CN01ktT8451iQutqReELT_!!6000000004408-0-tps-689-487.jpg");
         map1.put("min_pixels", 3072);
         map1.put("max_pixels", 8388608);
+        List<Map<String, Object>> list = Arrays.asList(map1, map);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(list);
+        return chatModel.call(json);
+    }
+
+    @GetMapping("/getImageInfo2")
+    String getImageInfo2() throws JsonProcessingException {
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("type", "text");
+        map.put("text", "这是什么");
+        Map<String, Object> map1 = Maps.newHashMap();
+        map1.put("type", "image_url");
+        map1.put("image_url", "https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg");
+        List<Map<String, Object>> list = Arrays.asList(map1, map);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(list);
+        return chatModel.call(json);
+    }
+
+    @GetMapping("/getVideo")
+    String getVideo() throws JsonProcessingException {
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("type", "text");
+        map.put("text", "这段视频的内容是什么?");
+        Map<String, Object> map1 = Maps.newHashMap();
+        map1.put("type", "video_url");
+        map1.put("video_url", "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241115/cqqkru/1.mp4");
         List<Map<String, Object>> list = Arrays.asList(map1, map);
 
         ObjectMapper mapper = new ObjectMapper();
